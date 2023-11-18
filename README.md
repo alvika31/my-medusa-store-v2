@@ -1,15 +1,15 @@
-## Cara Penggunaan Medusa Backend
-1. Buka terminal apa saja, lalu ketikan perintah: git clone https://github.com/alvika31/my-medusa-store.git
-2. setelah selesai, buka terminal lalu ketik: npm install
-3. Setelah selesai, buka PgAdmin 4 atau apa saja untuk memanage postgresSQL, lalu buat database baru.
-4. Configurasikan nama database dan password databasenya di .env dan datasource.js dengan nama dan password database yang dibuat.
-5. setelah itu di terminal ketikan perintah: npm run build dan npx medusa migrations run
-6. Jika ada error (0 , modules_sdk_1.registerModules) is not a function, maka di direktori root, package.json ubah versi @medusajs/medusa ke versi "1.17.4" lalu ketikan perintah: npm install
-7. ketikan perintah lagi: npm run build dan npx medusa migrations run
-8. Setelah itu ketikan perintah: npm install dan perintah: npm run dev
-9. Sesudah selesai ketikan perintah: npm run dev untuk menjalankan server backend dan dashboard admin
+## How to install Medusa Backend
+1. Open any terminal, then type the command: git clone https://github.com/alvika31/my-medusa-store.git
+2. when finished, open the terminal and type: npm install
+3. Once done, open PgAdmin 4 or anything to manage postgresSQL, then create a new database.
+4. Configure the database name and database password in .env and datasource.js with the database name and password created.
+5. after that in the terminal type the command: npm run build and npx medusa migrations run
+6. If there is an error (0, modules_sdk_1.registerModules) is not a function, then in the root directory, package.json change the version @medusajs/medusa to version "1.17.4" then type the command: npm install
+7. type the command again: npm run build and npx medusa migrations run
+8. After that type the command: npm install and the command: npm run dev
+9. When finished type the command: npm run dev to run the backend server and admin dashboard
 backend: localhost:9000
 dashboard admin: localhost:7001
 
-10. Untuk dokumentasi API ada di: localhost:9000/store/api-docs
+10. The API documentation is at: localhost:9000/store/api-docs
 
