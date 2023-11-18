@@ -7,9 +7,10 @@
 6. If there is an error (0, modules_sdk_1.registerModules) is not a function, then in the root directory, package.json change the version @medusajs/medusa to version "1.17.4" then type the command: npm install
 7. type the command again: npm run build and npx medusa migrations run
 8. After that type the command: npm install and the command: npm run dev
-9. When finished type the command: npm run dev to run the backend server and admin dashboard
+9. for create acoount admin type the command: npx medusa user --email admin@medusa-test.com --password password
+10. When finished type the command: npm run dev to run the backend server and admin dashboard
 backend: localhost:9000
 dashboard admin: localhost:7001
 
-10. The API documentation is at: localhost:9000/store/api-docs
+11. The API documentation is at: localhost:9000/store/api-docs
 
