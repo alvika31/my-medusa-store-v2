@@ -1,5 +1,5 @@
 ## How to install Medusa Backend
-1. Open any terminal, then type the command: git clone https://github.com/alvika31/my-medusa-store.git
+1. Open any terminal, then type the command: git clone https://github.com/alvika31/my-medusa-store-v2.git
 2. when finished, open the terminal and type: npm install
 3. Once done, open PgAdmin 4 or anything to manage postgresSQL, then create a new database.
 4. Configure the database name and database password in .env and datasource.js with the database name and password created.
