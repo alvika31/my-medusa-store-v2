@@ -3,6 +3,7 @@ import { EntityManager } from "typeorm";
 import WishlistRepository from "src/repositories/wishlist";
 import { IsString } from "class-validator"
 import { validator } from "@medusajs/medusa";
+import WishlistNameRepository from "src/repositories/wishlistName";
 
 export const insertWishlistItem = async (
     req: MedusaRequest,
@@ -22,7 +23,22 @@ export const insertWishlistItem = async (
         const wishlistRepo = manager.withRepository(wishlistRepository);
 
         const validated = await validator(StorePostWishlistReq, req.body)
-        if (req.user && req.user.customer_id) {
+
+        const wishlistNameRepository: typeof WishlistNameRepository =
+            req.scope.resolve("wishlistNameRepository");
+        const wishlistNameRepo = manager.withRepository(wishlistNameRepository);
+        const wishlistName = await wishlistNameRepo.findOne({
+            where: {
+                id: wishlist_name_id
+            },
+            relations: ["wishlists"],
+        })
+        if (!wishlistName) {
+            res.status(404).json({ message: "Wishlist Name not found" });
+            return;
+        }
+
+        if (req.user && req.user.customer_id && req.user.customer_id === wishlistName.customer_id) {
             const existingWishlist = await wishlistRepo.findOne({
                 where: {
                     product_id: validated.product_id,

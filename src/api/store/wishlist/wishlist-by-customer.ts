@@ -13,7 +13,7 @@ export const getWishlistByCustomer = async (req: MedusaRequest, res: MedusaRespo
     const manager: EntityManager = req.scope.resolve("manager");
     const wishListRepo = manager.withRepository(wishlistNameRepository);
 
-    if (req.user && req.user.customer_id) {
+    if (req.user && req.user.customer_id && req.user.customer_id === customer_id) {
       const wishlistByCustomer = await wishListRepo.find({
         where: { customer_id: customer_id },
         relations: ['region', 'wishlists.variant.prices', 'wishlists.variant.product.options', 'wishlists.variant.options'],

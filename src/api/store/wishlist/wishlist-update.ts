@@ -15,7 +15,18 @@ export const updateWishlist = async (req: MedusaRequest, res: MedusaResponse) =>
         const manager: EntityManager = req.scope.resolve("manager");
         const wishListRepo = manager.withRepository(wishlistNameRepository);
 
-        if (req.user && req.user.customer_id) {
+        const wishlist = await wishListRepo.findOne({
+            where: {
+                id: id
+            }
+        })
+        if (!wishlist) {
+            res.status(404).json({ message: "Wishlist Name not found" });
+            return;
+        }
+
+
+        if (req.user && req.user.customer_id && req.user.customer_id === wishlist.customer_id) {
             const data = {
                 title: req.body.title
             }

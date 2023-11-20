@@ -20,16 +20,18 @@ export const deleteWishlist = async (req: MedusaRequest, res: MedusaResponse) =>
             req.scope.resolve("wishlistNameRepository");
         const wishListNameRepo = manager.withRepository(wishlistNameRepository);
 
-        if (req.user && req.user.customer_id) {
-            const wishlistName = await wishListNameRepo.findOne({
-                where: {
-                    id: id
-                }
-            })
-            if (!wishlistName) {
-                res.status(400).json({ message: "Invalid wishlistname id" });
-                return
+        const wishlistName = await wishListNameRepo.findOne({
+            where: {
+                id: id
             }
+        })
+        if (!wishlistName) {
+            res.status(400).json({ message: "Invalid wishlistname id" });
+            return
+        }
+
+        if (req.user && req.user.customer_id && req.user.customer_id === wishlistName.customer_id) {
+
             const wishlist = await wishListRepo.find({
                 where: {
                     wishlist_name_id: id
