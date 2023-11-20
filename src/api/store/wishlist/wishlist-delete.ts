@@ -1,58 +1,47 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
+import { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
 import { EntityManager } from "typeorm";
-import WishlistNameRepository from "src/repositories/wishlistName";
 import WishlistRepository from "src/repositories/wishlist";
-import { check, validationResult } from "express-validator";
+import WishlistNameRepository from "src/repositories/wishlistName";
 
-export const deleteWishlist = async (req: MedusaRequest, res: MedusaResponse) => {
+export const deleteWishlist = async (req: MedusaRequest, res: MedusaResponse): Promise<void> => {
     try {
         const { id } = req.params;
+
         if (!id || typeof id !== 'string') {
             res.status(400).json({ message: "Invalid or missing id" });
-            return
+            return;
         }
+
         const manager: EntityManager = req.scope.resolve("manager");
         const wishlistRepository: typeof WishlistRepository = req.scope.resolve("wishlistRepository");
+        const wishListNameRepository: typeof WishlistNameRepository = req.scope.resolve("wishlistNameRepository");
 
         const wishListRepo = manager.withRepository(wishlistRepository);
-
-        const wishlistNameRepository: typeof WishlistNameRepository =
-            req.scope.resolve("wishlistNameRepository");
-        const wishListNameRepo = manager.withRepository(wishlistNameRepository);
+        const wishListNameRepo = manager.withRepository(wishListNameRepository);
 
         const wishlistName = await wishListNameRepo.findOne({
-            where: {
-                id: id
-            }
-        })
+            where: { id: id }
+        });
+
         if (!wishlistName) {
             res.status(400).json({ message: "Invalid wishlistname id" });
-            return
+            return;
         }
 
-        if (req.user && req.user.customer_id && req.user.customer_id === wishlistName.customer_id) {
-
+        if (req.user?.customer_id === wishlistName.customer_id) {
             const wishlist = await wishListRepo.find({
-                where: {
-                    wishlist_name_id: id
-                }
-            })
-
-            if (!wishlist) {
-                res.status(400).json({ message: "Invalid wishlistname id" });
-                return
-            }
-            await wishListNameRepo.remove([wishlistName])
-            await wishListRepo.remove(wishlist)
-            res.json({ message: 'Wishlist Deleted' })
-
-        } else {
-            res.status(401).json({
-                wishlist: 'Unauthorized',
+                where: { wishlist_name_id: id }
             });
+
+            await wishListNameRepo.remove([wishlistName]);
+            await wishListRepo.remove(wishlist);
+            res.json({ message: 'Wishlist Deleted' });
+        } else {
+            res.status(401).json({ message: 'Unauthorized' });
         }
 
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
