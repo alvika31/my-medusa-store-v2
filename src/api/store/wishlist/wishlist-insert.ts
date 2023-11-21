@@ -12,7 +12,7 @@ export const insertWishlist = async (
     const wishlistNameService = req.scope.resolve('wishlistNameService');
 
     if (req.user?.customer_id === validated.customer_id) {
-      const payload = { title: validated.title, customer_id: validated.customer_id, region_id: validated.region_id }
+      const payload = { title: validated.title, customer_id: validated.customer_id }
       await wishlistNameService.createWishlistName(payload);
       res.status(201).json({
         message: "Success Insert Wishlist",
@@ -36,7 +36,4 @@ export class StorePostWishlistNameReq {
 
   @IsString()
   customer_id: string;
-
-  @IsString()
-  region_id: string;
 }

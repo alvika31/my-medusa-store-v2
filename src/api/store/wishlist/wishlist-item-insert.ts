@@ -22,7 +22,7 @@ export const insertWishlistItem = async (
             return;
         }
         if (req.user?.customer_id === wishlistName.customer_id) {
-            const payload = { product_id: validated.product_id, variant_id: validated.variant_id }
+            const payload = { variant_id: validated.variant_id }
             const existingWishlist = await wishlistNameService.cekWishlistItemExist(wishlist_name_id, payload)
             if (existingWishlist) {
                 res.status(400).json({ message: "Wishlist already exists" });
@@ -46,8 +46,6 @@ export const insertWishlistItem = async (
 };
 
 export class StorePostWishlistReq {
-    @IsString()
-    product_id: string;
 
     @IsString()
     variant_id: string;
