@@ -1,6 +1,4 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
-import { EntityManager } from "typeorm";
-import WishlistNameRepository from "src/repositories/wishlistName";
 
 export const updateWishlist = async (req: MedusaRequest, res: MedusaResponse): Promise<void> => {
     try {
@@ -10,28 +8,15 @@ export const updateWishlist = async (req: MedusaRequest, res: MedusaResponse): P
             res.status(400).json({ message: "Invalid or missing id" });
             return;
         }
-
-        const wishlistNameRepository: typeof WishlistNameRepository = req.scope.resolve("wishlistNameRepository");
-        const manager: EntityManager = req.scope.resolve("manager");
-        const wishListRepo = manager.withRepository(wishlistNameRepository);
-
-        const wishlist = await wishListRepo.findOne({
-            where: { id: id }
-        });
-
-        if (!wishlist) {
+        const wishlistNameService = req.scope.resolve('wishlistNameService');
+        const wishlistName = await wishlistNameService.retrieveWishlistName(id)
+        if (!wishlistName) {
             res.status(404).json({ message: "Wishlist Name not found" });
             return;
         }
-
-        if (req.user?.customer_id === wishlist.customer_id) {
-            const data = {
-                title: req.body.title
-            };
-
-            Object.assign(wishlist, data);
-            await wishListRepo.save(wishlist);
-
+        if (req.user?.customer_id === wishlistName.customer_id) {
+            const payload = { title: req.body.title }
+            await wishlistNameService.updateWishlistName(id, payload)
             res.json({ message: 'Wishlist Updated' });
         } else {
             res.status(401).json({ message: 'Unauthorized' });
