@@ -67,18 +67,11 @@
  * tags:
  *   name: WishlistName
  *   description: wishlist name operation
- * /store/wishlist/customer/{customer_id}:
+ * /store/wishlist/customer:
  *   get:
  *     summary: Get wishlist by customer ID
  *     tags: [WishlistName]
  *     description: Retrieve wishlist information for a specific customer.
- *     parameters:
- *       - in: path
- *         name: customer_id
- *         required: true
- *         description: Customer ID
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: Successful response
