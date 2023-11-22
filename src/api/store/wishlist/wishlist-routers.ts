@@ -9,7 +9,7 @@ import { deleteWishlistItem } from "./wishlist-item-delete";
 import { authenticateCustomer } from "@medusajs/medusa"
 
 export default function wishlistRouters(router: Router) {
-    router.get("/store/wishlist/customer/:customer_id", authenticateCustomer(), wrapHandler(getWishlistByCustomer));
+    router.get("/store/wishlist/customer", authenticateCustomer(), wrapHandler(getWishlistByCustomer));
     router.post("/store/wishlist", authenticateCustomer(), wrapHandler(insertWishlist));
     router.delete("/store/wishlist/:id", authenticateCustomer(), wrapHandler(deleteWishlist));
     router.put("/store/wishlist/:id", authenticateCustomer(), wrapHandler(updateWishlist));
