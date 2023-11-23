@@ -1,5 +1,5 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
-import { IsString } from "class-validator";
+import { IsString, IsOptional } from "class-validator";
 import { validator } from "@medusajs/medusa";
 
 
@@ -11,8 +11,8 @@ export const insertWishlist = async (
     const validated = await validator(StorePostWishlistNameReq, req.body);
     const wishlistNameService = req.scope.resolve('wishlistNameService');
 
-    if (req.user?.customer_id === validated.customer_id) {
-      const payload = { title: validated.title, customer_id: validated.customer_id }
+    if (req.user?.customer_id) {
+      const payload = { title: validated.title, customer_id: req.user?.customer_id }
       await wishlistNameService.createWishlistName(payload);
       res.status(201).json({
         message: "Success Insert Wishlist",
@@ -31,9 +31,8 @@ export const insertWishlist = async (
 };
 
 export class StorePostWishlistNameReq {
+
   @IsString()
   title: string;
 
-  @IsString()
-  customer_id: string;
 }
