@@ -1,4 +1,3 @@
-import { formatAmount } from "medusa-react";
 import WishlistItemCard from "./wishlist-item-card";
 
 const WishlistCard = ({ wishlist, isLoading }) => {
@@ -21,10 +20,7 @@ const WishlistCard = ({ wishlist, isLoading }) => {
                 </p>
               </div>
 
-              <WishlistItemCard
-                wishlists={item.wishlists}
-                region={item.region}
-              />
+              <WishlistItemCard wishlists={item.wishlists} />
             </div>
           ))}
         </div>

@@ -1,6 +1,4 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/medusa";
-import { EntityManager } from "typeorm";
-import WishlistNameRepository from "src/repositories/wishlistName";
 
 export const wishlistGet = async (req: MedusaRequest, res: MedusaResponse) => {
     try {
@@ -9,18 +7,10 @@ export const wishlistGet = async (req: MedusaRequest, res: MedusaResponse) => {
             res.status(400).json({ message: "Invalid or missing customer_id" });
             return
         }
-        const wishlistNameRepository: typeof WishlistNameRepository = req.scope.resolve("wishlistNameRepository");
-        const manager: EntityManager = req.scope.resolve("manager");
-        const wishListRepo = manager.withRepository(wishlistNameRepository);
-
-        const wishlistByCustomer = await wishListRepo.find({
-            order: { id: 'ASC' },
-            where: { customer_id: customer_id },
-            relations: ['region', 'wishlists.variant.prices', 'wishlists.variant.product.options', 'wishlists.variant.options'],
-
-        });
+        const wishlistService = req.scope.resolve('wishlistNameService');
+        const wishlist = await wishlistService.getWishlistCustomer(customer_id);
         res.json({
-            wishlist: wishlistByCustomer,
+            wishlist: wishlist,
         });
     } catch (error) {
         console.error(error);

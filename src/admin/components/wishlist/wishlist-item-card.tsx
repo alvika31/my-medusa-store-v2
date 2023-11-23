@@ -1,6 +1,8 @@
 import LineItemOptions from "./line-item-option";
 import { formatAmount } from "medusa-react";
-const WishlistItemCard = ({ wishlists, region }) => {
+import { useRegions } from "medusa-react";
+const WishlistItemCard = ({ wishlists }) => {
+  const { regions } = useRegions();
   return (
     <>
       {wishlists.length === 0 && (
@@ -25,15 +27,19 @@ const WishlistItemCard = ({ wishlists, region }) => {
                 <div className="flex flex-col gap-y-1">
                   <LineItemOptions variant={item?.variant} />
                   {item.variant?.prices.map((price: any, index: string) => {
+                    const matchingRegion = regions?.find(
+                      (region) => region.currency_code === price.currency_code
+                    );
                     return (
                       <div key={index}>
                         <p className="text-xs">
                           Unit Price:{" "}
-                          {formatAmount({
-                            amount: price.amount || 0,
-                            region: region,
-                            includeTaxes: false,
-                          })}
+                          {matchingRegion &&
+                            formatAmount({
+                              amount: price.amount || 0,
+                              region: matchingRegion,
+                              includeTaxes: false,
+                            })}
                         </p>
                       </div>
                     );

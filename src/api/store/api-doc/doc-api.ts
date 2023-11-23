@@ -7,7 +7,6 @@
  *       required:
  *         - title
  *         - customer_id
- *         - region_id
  *       properties:
  *         id:
  *           type: string
@@ -18,9 +17,6 @@
  *         customer_id:
  *           type: string
  *           description: The wishlist name of customer
- *         region_id:
- *           type: string
- *           description: The price format of the total
  *         created_at:
  *           type: string
  *           format: date
@@ -37,7 +33,6 @@
  *     Wishlist:
  *       type: object
  *       required:
- *         - product_id
  *         - wishlist_name_id
  *         - variant_id
  *       properties:
@@ -52,9 +47,6 @@
  *           type: string
  *           format: date
  *           description: The date the wishlist was updated
- *         product_id:
- *           type: string
- *           description: The products added to wishlist
  *         wishlist_name_id: 
  *           type: string
  *           description: The wishlist that is entered into the wishlist name
@@ -155,16 +147,8 @@
  *               title:
  *                 type: string
  *                 description: The title of the wishlist name.
- *               customer_id:
- *                 type: string
- *                 description: The ID of the customer for whom the wishlist name is created.
- *               region_id:
- *                 type: string
- *                 description: The ID of the region associated with the wishlist name.
  *             required:
  *               - title
- *               - customer_id
- *               - region_id
  *     responses:
  *       201:
  *         description: Wishlist created successfully
@@ -408,14 +392,10 @@
  *           schema:
  *             type: object
  *             properties:
- *               product_id:
- *                 type: string
- *                 description: The ID of the product to add to the wishlist.
  *               variant_id:
  *                 type: string
  *                 description: The ID of the product variant to add to the wishlist.
  *             required:
- *               - product_id
  *               - variant_id
  *     responses:
  *       201:
