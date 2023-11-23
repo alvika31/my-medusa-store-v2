@@ -9,7 +9,7 @@ import {
   ConfigModule,
 } from "@medusajs/medusa/dist/types/global"
 import cors from "cors"
-
+import { countProductWishlist } from "./count-product-wishlist";
 export default function adminRouters(rootDirectory, router: Router) {
 
   const { configModule } = getConfigFile<ConfigModule>(rootDirectory, "medusa-config");
@@ -19,7 +19,6 @@ export default function adminRouters(rootDirectory, router: Router) {
     origin: projectConfig.admin_cors.split(","),
     credentials: true,
   };
-
-  router.options("/admin/:customer_id/wishlist", cors(adminCorsOptions));
   router.get("/admin/:customer_id/wishlist", cors(adminCorsOptions), authenticate(), wrapHandler(wishlistGet));
+  router.get("/admin/:product_id/count/wishlist", cors(adminCorsOptions), authenticate(), wrapHandler(countProductWishlist));
 }

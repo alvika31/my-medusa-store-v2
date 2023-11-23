@@ -35,7 +35,6 @@ const CustomerDetailWidget = () => {
     AdminWishlistQuery,
     AdminWishlistRes
   >(`/${id}/wishlist`, ["wishlist", id]);
-  console.log(data);
 
   return (
     <div>

@@ -1,22 +1,69 @@
 import { TransactionBaseService } from "@medusajs/medusa"
 import WishlistNameRepository from "src/repositories/wishlistName";
 import WishlistRepository from "src/repositories/wishlist";
+import ProductVariantRepository from "src/repositories/product-variant";
 import { WishlistName } from "src/models/wishlistName";
 import { Wishlist } from "src/models/wishlist";
+// import { ProductVariant } from "src/models/productVariant";
 import { MedusaError } from 'medusa-core-utils'
 import { Lifetime } from "awilix"
+import CustomerRepository from "src/repositories/customer";
 
 class WishlistNameService extends TransactionBaseService {
     static LIFE_TIME = Lifetime.SCOPED
     protected wishlistNameRepository_: typeof WishlistNameRepository;
     protected wishlistRepository_: typeof WishlistRepository;
+    protected productVariantRepository_: typeof ProductVariantRepository;
+    protected customerRepository_: typeof CustomerRepository;
 
     constructor(container) {
         super(container);
         this.wishlistNameRepository_ = container.wishlistNameRepository;
         this.wishlistRepository_ = container.wishlistRepository;
+        this.productVariantRepository_ = container.productVariantRepository;
+        this.customerRepository_ = container.customerRepository;
     }
 
+    async countUserWishlistProduct(product_id: string): Promise<any> {
+        const productVariantRepo = this.activeManager_.withRepository(
+            this.productVariantRepository_
+        );
+
+        try {
+            const productVariants = await productVariantRepo.find({
+                where: { product_id },
+                relations: ['wishlists', 'wishlists.wishlistName'],
+            });
+
+            if (!productVariants || productVariants.length === 0) {
+                throw new MedusaError(
+                    MedusaError.Types.NOT_FOUND,
+                    `Product variants not found for product_id: ${product_id}`
+                );
+            }
+
+            const result = {
+                totalUsers: 0,
+                variantCounts: {},
+            };
+
+            productVariants.forEach((productVariant) => {
+                result.totalUsers += productVariant.wishlists.length;
+
+                productVariant.wishlists.forEach((wishlist) => {
+                    const { title } = productVariant;
+                    result.variantCounts[title] = (result.variantCounts[title] || 0) + 1;
+                });
+            });
+
+            return result;
+        } catch (error) {
+            throw new MedusaError(
+                MedusaError.Types.NOT_FOUND,
+                `Product variants not found for product_id: ${product_id}`
+            );
+        }
+    }
     async getWishlistCustomer(customer_id: string): Promise<WishlistName[]> {
         const wishlistNameRepo = this.activeManager_.withRepository(
             this.wishlistNameRepository_
