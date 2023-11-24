@@ -519,6 +519,58 @@
  *                   type: string
  *                   example: Unauthorized. Admin access required.
  */
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Admin operations
+ * /admin/{product_id}/count/wishlist:
+ *   get:
+ *     summary: Get count data product in wishlist customer (admin access required)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidXNyXzAxSERWUUJTVkFUNU1KUUROMFZCTjFWREhDIiwiZG9tYWluIjoiYWRtaW4iLCJpYXQiOjE2OTk5NTIyNTIsImV4cCI6MTcwMDAzODY1Mn0.73srPqiCkOnfSjbGZ5Tngs1V5hLr1a51RXBVYMKba2M"]
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the product to get count
+ *     responses:
+ *       200:
+ *         description: Wishlist retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               variant:
+ *                 totalUsers: 4
+ *                 variantCounts:
+ *                   "Army Green / EXT": 2
+ *                   "Army Green / S": 1
+ *                   "Army Green / L": 1
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ *       401:
+ *         description: Unauthorized. Admin access required.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized. Admin access required.
+ */
+
 
 
 
